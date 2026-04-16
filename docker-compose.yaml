@@ -1,0 +1,20 @@
+services:
+  project1-db:
+    image: postgres:17-alpine
+    container_name: project-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: project1
+      POSTGRES_USER: project1
+      POSTGRES_PASSWORD: project1
+
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+
+volumes:
+  pgdata:

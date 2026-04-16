@@ -1,0 +1,7 @@
+server:
+  port: 5454
+
+spring:
+  profiles:
+    include:
+      - db
