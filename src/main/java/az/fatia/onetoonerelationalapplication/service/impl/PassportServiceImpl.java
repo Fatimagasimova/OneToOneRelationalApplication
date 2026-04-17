@@ -58,15 +58,12 @@ public class PassportServiceImpl implements PassportService {
     @Override
     public ResponseEntity<String> deletePassport(Long id) {
         Passport passport = get(id);
-//
         if (passport.getPerson() != null) {
-            passport.getPerson().setPassport(null); // Person artıq bu pasportu tanımır
-            passport.setPerson(null); // Pasport da personu tanımır
+            passport.getPerson().setPassport(null);
+            passport.setPerson(null);
         }
 
-        // 3. İndi silirik
         passportRepository.delete(passport);
-//        passportRepository.deleteById(id);
         return ResponseEntity.ok("Passport has been deleted with id " + id);
     }
 

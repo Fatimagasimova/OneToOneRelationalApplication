@@ -1,6 +1,9 @@
+version: '3.8'
+
 services:
   project1-db:
     image: postgres:17-alpine
+    platform: linux/amd64
     container_name: project-db
     restart: always
     ports:
@@ -9,12 +12,36 @@ services:
       POSTGRES_DB: project1
       POSTGRES_USER: project1
       POSTGRES_PASSWORD: project1
-
-
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - project-network
 
-
+  app:
+    image: fatiagasimova/onetoone:v1
+    platform: linux/amd64
+    container_name: onetoone_image
+    restart: on-failure
+    depends_on:
+      - project1-db
+    ports:
+      - "5555:5454"
+    environment:
+      DB_HOST: project1-db
+      DB_PORT: 5432
+      DB_NAME: project1
+      DB_USERNAME: project1
+      DB_PASSWORD: project1
+      SPRING_PROFILES_ACTIVE: db
+      SPRING_SQL_INIT_MODE: always
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: true
+    networks:
+      - project-network
 
 volumes:
   pgdata:
+
+networks:
+  project-network:
+    driver: bridge
